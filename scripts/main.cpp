@@ -4,7 +4,6 @@
 #include <emscripten/bind.h>
 
 using namespace std;
-using namespace emscripten;
 
 vector<vector<int>> optimize(const vector<int>& tiempos, int num_clusters) {
     vector<vector<int>> clusters(num_clusters);
@@ -27,8 +26,4 @@ vector<vector<int>> optimize(const vector<int>& tiempos, int num_clusters) {
     return clusters;
 }
 
-EMSCRIPTEN_BINDINGS(optimize_module) {
-    emscripten::function("optimize", &optimize);
-    register_vector<int>("vector<int>");
-    register_vector<vector<int>>("vector<vector<int>>");
-}
+

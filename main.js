@@ -1,34 +1,27 @@
-import optimizeModule from './assembly.js';
-
-console.log('Hello from main.js!');
-
-const OptimizeModule = await optimizeModule({
-  onRuntimeInitialized() {
-    try {
-      console.log('Runtime initialized!');
-      console.log('Calling optimize...');
-
-      const tiempos = [30,50,10,20,90];
-      const M = 2;
-
-      console.log(`Tiempos: ${tiempos.join(", ")}`);
-
-      const resultPtr = OptimizeModule.ccall('optimize',tiempos, M);
-
-      const result = optimize.getVectorVectorInt(resultPtr);
-      console.log(`Result: ${result}`);
-
-      result.forEach((cluster, i) => {
-        console.log(`Cluster ${i + 1}: ${cluster.map(trabajo => `T${trabajo + 1}`).join(" ")}`);
-      });
-
-      OptimizeModule.destroyVectorVectorInt(resultPtr);
-
-    } catch (e) {
-      console.error(e);
+Module.onRuntimeInitialized = () => {
+    const clusterNum = 3;
+    const times = [1, 4, 3, 7];
+    const timesArray = Uint32Array.from(times);
+    const timePtr = Module._malloc(timesArray.byteLength);
+    Module.HEAPU32.set(timesArray, timePtr >> 2);
+    const optimizeFunc = Module.cwrap('optimize', 'number', ['number', 'number', 'number']);
+    const clustersPtr = optimizeFunc(timePtr, times.length, clusterNum);
+    const clusters = [];
+  
+    for (let i = 0; i < clusterNum; i++) {
+      const clusterPtr = Module.getValue(clustersPtr + i * 4, 'i32');
+      const cluster = [];
+  
+      for (let j = 0; j < times.length; j++) {
+        const value = Module.getValue(clusterPtr + j * 4, 'i32');
+        if (value === -1) break;
+        cluster.push(value);
+      }
+  
+      clusters.push(cluster);
     }
-    
-  }
-});
 
-console.log('Bye from main.js!');
+    console.log(clusters);
+  
+    Module._free(clustersPtr);
+  };
