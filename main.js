@@ -1,46 +1,10 @@
 function main() {
   Module.onRuntimeInitialized = () => {
-    const clusterNum = 10;
-    const times = [1, 4, 3, 7,8,5,6,7,4,6,8,6,5,4,5];
-    const timesArray = Uint32Array.from(times);
-    const timePtr = Module._malloc(timesArray.byteLength);
-    Module.HEAPU32.set(timesArray, timePtr >> 2);
-    const optimizeFunc = Module.cwrap('optimize', 'number', ['number', 'number', 'number']);
-
-    const startTimeC = performance.now();
-    const clustersPtr = optimizeFunc(timePtr, times.length, clusterNum);
-    const endTimeC = performance.now();
-    const timeC = endTimeC - startTimeC;
-
+    const clusterNum = 1;
+    const times = [];
     const clusters = [];
-  
-    for (let i = 0; i < clusterNum; i++) {
-      const clusterPtr = Module.getValue(clustersPtr + i * 4, 'i32');
-      const cluster = [];
-  
-      for (let j = 0; j < times.length; j++) {
-        const value = Module.getValue(clusterPtr + j * 4, 'i32');
-        if (value === -1) break;
-        cluster.push(value);
-      }
-  
-      clusters.push(cluster);
-    }
 
     console.log(clusters);
-    console.log(`Tiempo de ejecución en C: ${endTimeC - startTimeC} ms`);
-
-    Module._free(clustersPtr);
-
-
-    const startTimeJS = performance.now();
-    const clusters2 = optimize(times, clusterNum);
-    const endTimeJS = performance.now();
-    const timeJS = endTimeJS - startTimeJS;
-
-    console.log(clusters2);
-    console.log(`Tiempo de ejecución en JS: ${endTimeJS - startTimeJS} ms`);
-
     const clustersInput = document.getElementById("clusters");
     const clustersTbody = document.getElementById("clusters-body");
     clustersInput.addEventListener("input", actualizarClusters);
@@ -66,17 +30,20 @@ function main() {
 
     // Añadimos una fila por defecto con un id único a los clusters
     const row2 = document.createElement("tr");
-    row2.id = "cluster-1";
+    row2.id = "Cluster-1";
     const clusterCell = document.createElement("td");
     clusterCell.textContent = `Cluster 1`;
     row2.appendChild(clusterCell);
     const tiempoCell2 = document.createElement("td");
     const input2 = document.createElement("button");
     input2.type = "button";
+    input2.id = `cluster-1`;
     input2.textContent = "Ver tareas asignadas";
     tiempoCell2.appendChild(input2);
     row2.appendChild(tiempoCell2);
     clustersTbody.appendChild(row2);
+    const buttonCalculate = document.getElementById("Calcular");
+    buttonCalculate.addEventListener("click", actualizarTiempos);
 
     function actualizarTrabajos() {
 
@@ -85,6 +52,7 @@ function main() {
       trabajosInput.addEventListener('change', () => {
         console.log('El valor del input de trabajos ha cambiado a: ', trabajosInput.value);
       });
+      
 
 
       const numTrabajos = trabajosInput.value;
@@ -157,6 +125,7 @@ function main() {
         row2.appendChild(clusterCell);
         const tiempoCell2 = document.createElement("td");
         const button = document.createElement("button");
+        button.id = `cluster-${i}`;
         button.type = "button";
         button.textContent = "Ver tareas asignadas";
         tiempoCell2.appendChild(button);
@@ -164,11 +133,65 @@ function main() {
         clustersTbody.appendChild(row2);
       }
     }
+  
+    function actualizarTiempos() {
+      const times = [];
+    const tiempoInputs = document.querySelectorAll('#trabajos-body td input');
+      tiempoInputs.forEach(input => {
+        times.push(input.value);
+        });
+    const clusterNum = document.getElementById('clusters').value;
+    const timesArray = Uint32Array.from(times);
+    const timePtr = Module._malloc(timesArray.byteLength);
+    Module.HEAPU32.set(timesArray, timePtr >> 2);
+    const optimizeFunc = Module.cwrap('optimize', 'number', ['number', 'number', 'number']);
+
+    const startTimeC = performance.now();
+    const clustersPtr = optimizeFunc(timePtr, times.length, clusterNum);
+    const endTimeC = performance.now();
+    const timeC = endTimeC - startTimeC;
+
+    const clusters = [];
+  
+    for (let i = 0; i < clusterNum; i++) {
+      const clusterPtr = Module.getValue(clustersPtr + i * 4, 'i32');
+      const cluster = [];
+  
+      for (let j = 0; j < times.length; j++) {
+        const value = Module.getValue(clusterPtr + j * 4, 'i32');
+        if (value === -1) break;
+        cluster.push(value);
+      }
+  
+      clusters.push(cluster);
+    }
+
+    console.log(clusters);
+    console.log(`Tiempo de ejecución en C: ${endTimeC - startTimeC} ms`);
+
+    Module._free(clustersPtr);
+
+
+    const startTimeJS = performance.now();
+    const clusters2 = optimize(times, clusterNum);
+    const endTimeJS = performance.now();
+    const timeJS = endTimeJS - startTimeJS;
+
+    console.log(clusters2);
+    console.log(`Tiempo de ejecución en JS: ${endTimeJS - startTimeJS} ms`);
+    
     const timeJSElement = document.getElementById("timeJS");
-    timeJSElement.textContent = `${timeJS.toFixed(2)} ms`;
+    timeJSElement.textContent = `${Number(timeJS).toFixed(2)} ms`;
 
     const timeCElement = document.getElementById("timeC");
-    timeCElement.textContent = `${timeC.toFixed(2)} ms`;
+    timeCElement.textContent = `${Number(timeC).toFixed(2)} ms`;
+    const trabajosList = document.getElementById(`cluster-1`);
+    trabajosList.textContent = clusters[0];
+    for(var i = 1; i < clusterNum+1; i++){
+      const trabajosList = document.getElementById(`cluster-${i}`);
+      trabajosList.textContent = clusters[i-1];
+    }
+  }
   };
 }
 
