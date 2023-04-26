@@ -10,6 +10,8 @@ function main() {
     const startTimeC = performance.now();
     const clustersPtr = optimizeFunc(timePtr, times.length, clusterNum);
     const endTimeC = performance.now();
+    const timeC = endTimeC - startTimeC;
+
     const clusters = [];
   
     for (let i = 0; i < clusterNum; i++) {
@@ -27,13 +29,15 @@ function main() {
 
     console.log(clusters);
     console.log(`Tiempo de ejecución en C: ${endTimeC - startTimeC} ms`);
-  
+
     Module._free(clustersPtr);
 
 
     const startTimeJS = performance.now();
     const clusters2 = optimize(times, clusterNum);
     const endTimeJS = performance.now();
+    const timeJS = endTimeJS - startTimeJS;
+
     console.log(clusters2);
     console.log(`Tiempo de ejecución en JS: ${endTimeJS - startTimeJS} ms`);
 
@@ -160,6 +164,11 @@ function main() {
         clustersTbody.appendChild(row2);
       }
     }
+    const timeJSElement = document.getElementById("timeJS");
+    timeJSElement.textContent = `${timeJS.toFixed(2)} ms`;
+
+    const timeCElement = document.getElementById("timeC");
+    timeCElement.textContent = `${timeC.toFixed(2)} ms`;
   };
 }
 
