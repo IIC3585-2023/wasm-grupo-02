@@ -1,5 +1,5 @@
 function optimize(times, numClusters) {
-    const clusters = Array.from({ length: numClusters }, () => []);
+    const clusters = Array.from({ length: numClusters }, () => Array.from({ length: times.length }, () => 0));
     const clustersTimes = new Map();
 
     for (let i = 0; i < numClusters; i++) {
@@ -18,7 +18,7 @@ function optimize(times, numClusters) {
             }
         }
 
-        clusters[clusterId].push(i);
+        clusters[clusterId][i] = i+1;
         clustersTimes.set(clusterId, minTime + time);
     }
 

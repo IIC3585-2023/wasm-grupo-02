@@ -1,12 +1,15 @@
 function main() {
   Module.onRuntimeInitialized = () => {
-      const clusterNum = 3;
-      const times = [1, 4, 3, 7];
+      const clusterNum = 10;
+      const times = [1, 4, 3, 7,8,5,6,7,4,6,8,6,5,4,5];
       const timesArray = Uint32Array.from(times);
       const timePtr = Module._malloc(timesArray.byteLength);
       Module.HEAPU32.set(timesArray, timePtr >> 2);
       const optimizeFunc = Module.cwrap('optimize', 'number', ['number', 'number', 'number']);
+
+      const startTimeC = performance.now();
       const clustersPtr = optimizeFunc(timePtr, times.length, clusterNum);
+      const endTimeC = performance.now();
       const clusters = [];
     
       for (let i = 0; i < clusterNum; i++) {
@@ -23,8 +26,16 @@ function main() {
       }
 
       console.log(clusters);
+      console.log(`Tiempo de ejecución en C: ${endTimeC - startTimeC} ms`);
     
       Module._free(clustersPtr);
+
+
+      const startTimeJS = performance.now();
+      const clusters2 = optimize(times, clusterNum);
+      const endTimeJS = performance.now();
+      console.log(clusters2);
+      console.log(`Tiempo de ejecución en JS: ${endTimeJS - startTimeJS} ms`);
 
       const clustersInput = document.getElementById("clusters");
       const clustersTbody = document.getElementById("clusters-body");
