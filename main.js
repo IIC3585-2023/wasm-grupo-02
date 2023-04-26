@@ -75,6 +75,14 @@ function main() {
     clustersTbody.appendChild(row2);
 
     function actualizarTrabajos() {
+
+      const trabajosInput = document.getElementById('trabajos');
+
+      trabajosInput.addEventListener('change', () => {
+        console.log('El valor del input de trabajos ha cambiado a: ', trabajosInput.value);
+      });
+
+
       const numTrabajos = trabajosInput.value;
       const rows = trabajosTbody.getElementsByTagName("tr");
       let numRows = rows.length;
@@ -113,9 +121,23 @@ function main() {
       while (trabajosTbody.getElementsByTagName("tr").length > numTrabajos) {
         trabajosTbody.removeChild(trabajosTbody.lastChild);
       }
+
+      const tiempoInputs = document.querySelectorAll('#trabajos-body td input');
+      tiempoInputs.forEach(input => {
+        input.addEventListener('change', () => {
+          console.log(`El valor del input de tiempo de asignación ha cambiado a: ${input.value}`);
+        });
+      });
     }
 
     function actualizarClusters() {
+
+      const clustersInput = document.getElementById('clusters');
+
+      clustersInput.addEventListener('change', () => {
+        console.log('El valor del input de clusters ha cambiado a: ', clustersInput.value);
+      });
+
       const numClusters = clustersInput.value;
     
       // Eliminamos todas las filas existentes de la tabla de clusters
