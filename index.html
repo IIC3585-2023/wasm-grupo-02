@@ -47,21 +47,6 @@
       </tr>
     </thead>
     <tbody id="clusters-body">
-      <script>
-        const numClusters = document.getElementById("clusters").value;
-        for (let i = 1; i <= numClusters; i++) {
-          const row2 = document.createElement("tr");
-          const clusterCell = document.createElement("td");
-          clusterCell.textContent = `Cluster ${i}`;
-          row2.appendChild(clusterCell);
-          const tiempoCell2 = document.createElement("td");
-          const button2 = document.createElement("button");
-          button2.textContent = "Ver tareas asignadas";
-          tiempoCell2.appendChild(button2); // Reemplaza el input por el button
-          row2.appendChild(tiempoCell2);
-          document.querySelector("#clusters-body").appendChild(row2); 
-        }
-      </script>
     </tbody>
   </table>
 </div>
