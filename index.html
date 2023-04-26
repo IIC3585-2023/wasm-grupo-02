@@ -7,54 +7,54 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
   </head>
 <body>
-  <script async src="scripts/webAssembly.js"></script>
-  <script async src="main.js"></script>
-  <header>
+<script async src="scripts/webAssembly.js"></script>
+<script async src="main.js"></script>
+
+<div class="main-container">
+  <div class="header">
     <h1>Asignación de trabajos a clusters</h1>
-  </header>
+  </div> 
   <div class="container">
-    
-  <div id="trabajosColumn" class="column">
+    <div id="trabajosColumn" class="column">
+        <form>
+          <label for="trabajos">Número de trabajos:</label>
+          <input type="number" id="trabajos" name="trabajos" min="1" value="1"><br><br>
+        </form>
+        <table>
+          <thead>
+            <tr>
+              <th>Trabajos</th>
+              <th>Tiempo</th>
+            </tr>
+          </thead>
+          <tbody id="trabajos-body">
+          </tbody>
+        </table>
+    </div>
+    <div id="clustersColumn" class="column">
       <form>
-        <label for="trabajos">Número de trabajos:</label>
-        <input type="number" id="trabajos" name="trabajos" min="1" value="1"><br><br>
+        <label for="clusters">Número de clusters:</label>
+        <input type="number" id="clusters" name="clusters" min="1" value="1"><br><br>
       </form>
       <table>
         <thead>
           <tr>
-            <th>Trabajos</th>
-            <th>Tiempo</th>
+            <th>Cluster</th>
+            <th>Resultado</th>
           </tr>
         </thead>
-        <tbody id="trabajos-body">
+        <tbody id="clusters-body">
         </tbody>
       </table>
     </div>
-    
-    
-    
-
-<div id="clustersColumn" class="column">
-  <form>
-    <label for="clusters">Número de clusters:</label>
-    <input type="number" id="clusters" name="clusters" min="1" value="1"><br><br>
-  </form>
-  <table>
-    <thead>
-      <tr>
-        <th>Cluster</th>
-        <th>Resultado</th>
-      </tr>
-    </thead>
-    <tbody id="clusters-body">
-    </tbody>
-  </table>
-</div>
   </div>
-
-</body>
-
+</div>
 <footer>
   <p>Desarrollado por <a href="https://github.com/IIC3585-2023/wasm-grupo-02">Grupo 2</a>: <a href="https://github.com/fbesoainp">👨‍💻 Francisco Besoain</a>, <a href="https://github.com/felipecs13">&#127866; Felipe Carrasco</a> y <a href="https://github.com/josejimenezp">&#127863;José Tomás Jiménez</a></p>
 </footer>
+
+  
+</body>
+
+
 </html>

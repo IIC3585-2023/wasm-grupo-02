@@ -1,4 +1,4 @@
-header {
+.header {
     background-color: #146f0e;
     padding: 10px;
     margin-bottom: 20px;
@@ -6,25 +6,11 @@ header {
     border-radius: 0.5rem;
   }
   
-  header h1 {
-    color: white;
-    margin: 0;
-  }
-  
-  header nav {
-    float: right;
-  }
-  
-  header nav a {
-    color: white;
-    text-decoration: none;
-    margin-left: 10px;
-  }
-  
-  header nav a:hover {
-    text-decoration: underline;
+.header h1 {
+  color: white;
+  margin: 0;
 }
-  
+
 footer {
     background-color: #0d6706ae;
     color: rgb(229, 229, 229);
@@ -33,8 +19,11 @@ footer {
     bottom: 0;
     width: 100%;
     font-family:'Courier New', Courier;
-    margin-top: auto;
     font-size: small;
+    position: relative;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
   }
   
   
@@ -73,7 +62,7 @@ html {
     background-size: cover;
   }
 
-body {
+.main-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
@@ -84,7 +73,7 @@ body {
     border-radius: 1rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
   }
 
@@ -149,4 +138,12 @@ form {
     text-align: center;
     margin: 40px;
     color: #146f0e;
+}
+
+body {
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
 }
